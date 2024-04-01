@@ -1,7 +1,7 @@
 # ProjetL3
 execute using env
 ```python 
-source .venv/bin/activate
+source ENV/bin/activate
 ```
 run the website
 ```python
