@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon Profil</title>
+    <!-- Favicon-->
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+    <!-- Font Awesome icons (free version)-->
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+    <!-- Google fonts-->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css" />
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link href="css/styles.css" rel="stylesheet" />
+</head>
+<body id="page-top">
+    <!-- Navigation-->
+    <nav class="navbar navbar-expand-lg bg-secondary text-uppercase fixed-top" id="mainNav">
+        <div class="container">
+            <a class="navbar-brand" href="#page-top">PROJETL3</a>
+            <button class="navbar-toggler text-uppercase font-weight-bold bg-primary text-white rounded" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                Menu
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="/home">HOME</a></li>
+                    <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="/profil">Profil</a></li>
+                    {%if role_connected=='auteur'%}
+                    <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="/ouvrages">Ouvrages</a></li>
+                    <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="/planning">Planning</a></li>
+                    <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="/langues">Langues</a></li>
+                    {%elif role_connected=='etablissement'%}
+                    <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="/voeux">Voeux</a></li>
+                    <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="/auteurs">Auteurs</a></li>
+
+                    {%elif role_connected=='interprete'%}
+                    <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="/langues">Langues</a></li>
+                    {%endif%}
+                    <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="/intervention">Interventions</a></li>
+                    <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="/logout">Déconnexion</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- Masthead-->
+    <header class="masthead bg-primary text-white text-center">
+        <h1>Vos Interventions</h1>
+    </header>
+    <!-- Content Section -->
+    <section class="bg-light py-5">
+        <div id="ouvrage_container" class="container">
+            <table id="intervention_table" class="table">
+                <thead>
+                    <tr>
+                        <th>ID Intervention</th>
+                        <th>Date</th>
+                        <th>Durée</th>
+                        <th>État</th>
+                        <th>Nombre d'élèves</th>
+                        <th>ID d'établissement</th>
+                        <th>ID d'interprete</th>
+                        <th>ID d'accompagnateur</th>
+                        <th>ID Édition</th>
+                        <th>ID Auteur</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for intervention in interventions %}
+                    <tr>
+                        {% for value in intervention %}
+                        <td>{{ value }}</td>
+                        {% endfor %}
+                        <td>
+                            <form method="POST" action="/edit_intervention">
+                                <input type="hidden" name="id_intervention" value="{{ intervention[0] }}">
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {%if role_connected == 'admin'%}
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                Ajouter une intervention
+            </button>
+            
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Ajouter une intervation</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="add_interv" action="/add_interv" method="post">
+                                <div class="mb-3">
+                                    <label for="date" class="form-label">Date :</label>
+                                    <input type="date" class="form-control" id="date" name="date" min="{{ date_actuelle }}" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="duree" class="form-label">Durée : (entre 120 et 240 minutes)</label>
+                                    <input type="number" class="form-control" id="duree" min=120 max=240 name="duree" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="etat" class="form-label">État :</label>
+                                    <select type="text" class="form-control" id="etat" name="etat" >
+                                        <option value="">Choisir l'état d'intervention</option>
+                                        <option value="Annulée">Annulée</option>
+                                        <option value="Accepté">Accepté</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="nombre_eleves" class="form-label">Nombre d'élèves :</label>
+                                    <input type="number" class="form-control" id="nombre_eleves" name="nombre_eleves" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="id_etablissement" class="form-label">ID d'établissement :</label>
+                                    <select id="typeSelect" class="form-control form-control-lg" name="id_etablissement" required>
+                                        <option value="">Choisir l'établissement :</option>
+                                        {% for etablissement in etablissements %}
+                                        <option value="{{ etablissement[0] }}">{{ etablissement[0] }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                
+                                
+                                <div class="mb-3">
+                                    <label for="id_interprete" class="form-label">ID interprete :</label>
+                                    <select id="typeSelect" class="form-control form-control-lg" name="id_interprete" required>
+                                        <option value="">Choisir l'interprete :</option>
+                                        {% for interprete in interpretes %}
+                                        <option value="{{ interprete[0] }}">{{ interprete[0] }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="id_accompagnateur" class="form-label">ID accompagnateur :</label>
+                                    <select id="typeSelect" class="form-control form-control-lg" name="id_accompagnateur" required>
+                                        <option value="">Choisir l'accompagnateur :</option>
+                                        {% for accompagnateur in accompagnateurs %}
+                                        <option value="{{ accompagnateur[0] }}">{{ accompagnateur[0] }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="id_auteur" class="form-label">ID Auteur :</label>
+                                    <select id="typeSelect" class="form-control form-control-lg" name="id_auteur" required>
+                                        <option value="">Choisir l'auteur :</option>
+                                        {% for auteur in auteurs %}
+                                        <option value="{{ auteur[0] }}">{{ auteur[0] }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                            <button type="submit" class="btn btn-primary">ajouter intervention</button>
+                        </div>
+                    </form>
+                </div>
+                    </div>
+                </div>
+            </div>
+            {%endif%}
+            
+        </div>
+    </section>
+   
+    <!-- Footer-->
+    <footer class="footer text-center">
+        <div class="container">
+            <!-- Ajoutez votre contenu de pied de page ici -->
+        </div>
+    </footer>
+    <!-- Bootstrap core JS-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Core theme JS-->
+    <script src="js/scripts.js"></script>
+    <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *

@@ -18,93 +18,61 @@
     </head>
     <body id="page-top">
         <!-- Navigation-->
-        <nav class="navbar navbar-expand-lg bg-secondary text-uppercase fixed-top" id="mainNav">
-            <div class="container">
-                <a class="navbar-brand" href="#page-top">PROJETL3</a>
-                <button class="navbar-toggler text-uppercase font-weight-bold bg-primary text-white rounded" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-                    Menu
-                    <i class="fas fa-bars"></i>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarResponsive">
-                    <ul class="navbar-nav ms-auto">
-                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="/">HOME</a></li>
-                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="/auteur">auteur</a></li>
-
-                       
-                </div>
-            </div>
-        </nav>
-        <!-- Masthead-->
-        <header class="masthead bg-primary text-white text-center">
-            <div class="container d-flex align-items-center flex-column">
-                <!-- Masthead Avatar Image-->
-                
-                <!---  Exemple de formulaire d'envoie action ="nom du root dans main.py"
-                      <h1>Recherche d'Album</h1>
-                    <form action="/result" method="GET">
-                        <label for="artist">RECHERCHE:</label>
-                        <input type="text" id="artist" name="artist" required>
-                        <br>
-                        
-                        <input type="submit" value="Rechercher">
-                    </form>      
-                 --> 
-               
-                <!-- Masthead Heading-->
-                <div class="container mt-5" style="display: flex; flex-direction: column; align-items: center;">
-                        <h1>Résultat de la recherche</h1>
-                        <div class="alert alert-success" role="alert" style="width: 80%; text-align: left;">
-                            {% if message %}
-                            <h3>Nombre d'auditeurs: {{ message }}</h3>
-                            {% else %}
-                        <p>Aucune information.</p>
-                        {% endif %}
+        <section class="vh-100 gradient-custom">
+            <div class="container py-5 h-100">
+              <div class="row d-flex justify-content-center align-items-center h-100">
+                <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+                  <div class="card bg-dark text-white" style="border-radius: 1rem;">
+                    <div class="card-body p-5 text-center">
+          
+                      <div class="mb-md-5 mt-md-4 pb-5">
+          
+                        <h2 class="fw-bold mb-2 text-uppercase">Login</h2>
+                        <p class="text-white-50 mb-5">Please enter your login and password!</p>
+          
+                        <!-- Affichage du message d'erreur -->
+                        {% if error_message %}
+                        <div class="alert alert-danger" role="alert">
+                          {{ error_message }}
                         </div>
+                        {% endif %} 
+          
+                        <form action="/login" method="post"> <!-- Action pointe vers l'URL où votre application Flask reçoit les données -->
+                          
+                          <div class="form-outline form-white mb-4">
+                            <input type="email" id="typeEmailX" class="form-control form-control-lg" name="email" /> <!-- Utilisation de l'attribut "name" pour définir le nom du champ -->
+                            <label class="form-label" for="typeEmailX">Email</label>
+                          </div>
+          
+                          <div class="form-outline form-white mb-4">
+                            <input type="password" id="typePasswordX" class="form-control form-control-lg" name="password" /> <!-- Utilisation de l'attribut "name" pour définir le nom du champ -->
+                            <label class="form-label" for="typePasswordX">Password</label>
+                          </div>
+          
+                          <p class="small mb-5 pb-lg-2"><a class="text-white-50" href="#!">Forgot password?</a></p>
+          
+                          <button class="btn btn-outline-light btn-lg px-5" type="submit">Login</button>
+                        </form>
+          
+                        <div class="d-flex justify-content-center text-center mt-4 pt-1">
+                          <a href="#!" class="text-white"><i class="fab fa-facebook-f fa-lg"></i></a>
+                          <a href="#!" class="text-white"><i class="fab fa-twitter fa-lg mx-4 px-2"></i></a>
+                          <a href="#!" class="text-white"><i class="fab fa-google fa-lg"></i></a>
+                        </div>
+          
+                      </div>
+          
+                      <div>
+                        <p class="mb-0">Don't have an account? <a href="/signup" class="text-white-50 fw-bold">Sign Up</a></p>
+                      </div>
+          
+                    </div>
+                  </div>
                 </div>
-                
-                
-                <!-- Icon Divider-->
-                <div class="divider-custom divider-light">
-                    <div class="divider-custom-line"></div>
-                    <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
-                    <div class="divider-custom-line"></div>
-                </div>
-                <!-- Masthead Subheading-->
-                <p class="masthead-subheading font-weight-light mb-0">Bievenue</p>
+              </div>
             </div>
-        </header>
-        <footer class="footer text-center">
-            <div class="container">
-                <div class="row">
-                    <!-- Footer Location-->
-                    <div class="col-lg-4 mb-5 mb-lg-0">
-                        <h4 class="text-uppercase mb-4">Location</h4>
-                        <p class="lead mb-0">
-                            2215 John Daniel Drive
-                            <br />
-                            Clark, MO 65243
-                        </p>
-                    </div>
-                    <!-- Footer Social Icons-->
-                    <div class="col-lg-4 mb-5 mb-lg-0">
-                        <h4 class="text-uppercase mb-4">Around the Web</h4>
-                        <a class="btn btn-outline-light btn-social mx-1" href="#!"><i class="fab fa-fw fa-facebook-f"></i></a>
-                        <a class="btn btn-outline-light btn-social mx-1" href="#!"><i class="fab fa-fw fa-twitter"></i></a>
-                        <a class="btn btn-outline-light btn-social mx-1" href="#!"><i class="fab fa-fw fa-linkedin-in"></i></a>
-                        <a class="btn btn-outline-light btn-social mx-1" href="#!"><i class="fab fa-fw fa-dribbble"></i></a>
-                    </div>
-                    <!-- Footer About Text-->
-                    <div class="col-lg-4">
-                        <h4 class="text-uppercase mb-4">About Freelancer</h4>
-                        <p class="lead mb-0">
-                            Freelance is a free to use, MIT licensed Bootstrap theme created by
-                            <a href="http://startbootstrap.com">Start Bootstrap</a>
-                            .
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </footer>
+          </section>
+          
         <!-- Bootstrap core JS-->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
         <!-- Core theme JS-->

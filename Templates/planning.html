@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon Profil</title>
+    <!-- Favicon-->
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+    <!-- Font Awesome icons (free version)-->
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+    <!-- Google fonts-->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css" />
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link href="css/styles.css" rel="stylesheet" />
+</head>
+
+<body id="page-top">
+    <!-- Navigation-->
+    <nav class="navbar navbar-expand-lg bg-secondary text-uppercase fixed-top" id="mainNav">
+        <div class="container">
+            <a class="navbar-brand" href="#page-top">PROJETL3</a>
+            <button class="navbar-toggler text-uppercase font-weight-bold bg-primary text-white rounded" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                Menu
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="/home">HOME</a></li>
+                    <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="/profil">Ouvrages</a></li>
+                    <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="/planning">Planning</a></li>
+                    {%if role_connected=='admin'%}
+                    <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="/auteurs">Auteurs</a></li>
+                    <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="/voeux">Voeux</a></li>
+                    {%else%}
+                    <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="/profil">Profil</a></li>
+                    {%endif%}
+                    <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="/intervention">Interventions</a></li>
+                    <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="/logout">Déconnexion</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- Masthead-->
+    <header class="masthead bg-primary text-white text-center"> 
+        <h1>Votre Planning</h1>
+    </header>
+    <!-- Content Section -->
+    <section class="bg-light py-5">
+        <div class="container">
+            <div class="row mb-3">
+                <div class="col-12 d-flex justify-content-center gap-3">
+                    <div class="d-inline-flex align-items-center mr-3">
+                        <span class="alert bg-danger rounded-circle p-2" role="alert"></span>
+                        <span>Indisponible</span>
+                    </div>
+                    <div class="d-inline-flex align-items-center">
+                        <span class="alert bg-success rounded-circle p-2" role="alert"></span>
+                        <span>Disponible</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                {% for dispo in dispos %}
+                <div class="col-lg-4 col-md-6">
+                    <div class="card mb-3 {% if dispo[1] %}bg-success{% else %}bg-danger{% endif %}">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ dispo[0] }}</h5>
+                            <p class="card-text">id de disponibilité : {{ dispo[3] }}</p>
+                            <p class="card-text">Nombre d'interventions : {{ dispo[2] }}</p>
+                            <button class="btn btn-danger" onclick="deleteDispo('{{ dispo[3] }}')">Supprimer</button>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+    
+            <!-- Button trigger modal -->
+            {%if role_connected == 'auteur'%}
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                Ajouter une date
+            </button>
+            {%elif role_connected == 'admin'%}
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                Choisir l'auteur
+            </button>
+            {%endif%}
+    
+            <!-- Modal adding-->
+            {%if role_connected == 'auteur'%}
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Ajouter une date</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="planning_add" action="/planning_add" method="post">
+                                <div class="mb-3">
+                                    <label for="date_disponibilite" class="form-label">Date :</label>
+                                    <input type="date" class="form-control" id="date_disponibilite" min="{{ date_actuelle }}" name="date_disponibilite" oninput="disableWeekends()">
+                                </div>
+                                <div class="mb-3">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="disponibilite" name="disponibilite" >
+                                        <label class="form-check-label" for="disponibilite">
+                                            Disponible
+                                        </label>
+                                    </div>
+                                </div>
+                                
+                        
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                            <button type="submit" class="btn btn-primary">Confirmer l'ajout</button>
+                        </div>
+                    </form>
+                </div>
+                    </div>
+                </div>
+            </div>
+            {%elif role_connected == 'admin'%}
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Ajouter une date</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="admin_planning" action="/admin_planning" method="post">
+                                <div class="mb-3">
+                                    <label for="id_auteur" class="form-label">Disponibilité de quel auteur :</label>
+                                    <select id="typeSelect" class="form-control form-control-lg" name="id_auteur" required>
+                                        <option value="">Choisir l'auteur :</option>
+                                        {% for auteur in auteurs %}
+                                        <option value="{{ auteur[0] }}">{{ auteur[0] }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                            <button type="submit" class="btn btn-primary">Voir les disponibilités</button>
+                        </div>
+                    </form>
+                </div>
+                    </div>
+                </div>
+            </div>
+            {%endif%}
+
+
+
+            
+        </div>
+    </section>
+    <script>
+        function disableWeekends() {
+    var input = document.getElementById('date_disponibilite');
+    var date = new Date(input.value);
+    var day = date.getDay();
+    // 0 représente le dimanche et 6 représente le samedi
+    if (day === 0 || day === 6) {
+        // Si c'est un weekend, réinitialisez la valeur du champ de date à la date actuelle
+        input.value = '';
+        alert('Les weekends ne sont pas autorisés.');
+    }
+}   
+
+
+function deleteDispo(dispoId) {
+        if (confirm("Voulez-vous vraiment supprimer cette disponibilité ?")) {
+            fetch('/delete_dispo', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ id: dispoId })
+            })
+            .then(response => {
+                if (response.ok) {
+                    // Recharger la page après la suppression réussie
+                    window.location.reload();
+                } else {
+                    alert('La suppression de la disponibilité a échoué.');
+                }
+            })
+            .catch(error => console.error('Erreur lors de la suppression:', error));
+        }
+    }
+
+    </script>
+    <!-- Footer-->
+    <footer class="footer text-center">
+        <div class="container">
+            <!-- Ajoutez votre contenu de pied de page ici -->
+        </div>
+    </footer>
+    <!-- Bootstrap core JS-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Core theme JS-->
+    <script src="js/scripts.js"></script>
+    <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *

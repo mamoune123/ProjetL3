@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon Profil</title>
+    <!-- Favicon-->
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+    <!-- Font Awesome icons (free version)-->
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+    <!-- Google fonts-->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css" />
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link href="css/styles.css" rel="stylesheet" />
+</head>
+<body id="page-top">
+    <!-- Navigation-->
+    <nav class="navbar navbar-expand-lg bg-secondary text-uppercase fixed-top" id="mainNav">
+        <div class="container">
+            <a class="navbar-brand" href="#page-top">PROJETL3</a>
+            <button class="navbar-toggler text-uppercase font-weight-bold bg-primary text-white rounded" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                Menu
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="/home">HOME</a></li>
+                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="/profil">Profil</a></li>
+                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="/langues">langues</a></li>
+                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="/intervention">Interventions</a></li>
+                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="/logout">Déconnexion</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- Masthead-->
+    <header class="masthead bg-primary text-white text-center">
+        <h1>Vos langues</h1>
+    </header>
+    <!-- Content Section -->
+    {% if error_message %}
+                        <div class="alert alert-danger" role="alert">
+                          {{ error_message }}
+                        </div>
+    {% endif %} 
+          
+    <section class="bg-light py-5">
+        <div id="ouvrage_container" class="container">
+            <table id="langues_table" class="table">
+                <thead>
+                    <tr>
+                        <th>Langues</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for langue in langues %}
+                    <tr>
+                            <td>{{ langue[1] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Ajouter la langue</button>
+            <!-- Modal adding-->
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Ajouter la langue :</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="add_langue" action="/add_langue" method="post">
+                                <div class="mb-3">
+                                    <label for="priorite" class="form-label">Nom du Langue:</label>
+                                    <select id="typeSelect_langues" class="form-control form-control-lg" name="langue_choisi" required onchange="showInput()">
+                                        <option value="">Choisir une langue :</option>
+                                        <option value="vietnamien">Vietnamien</option>
+                                        <option value="français">Français</option>
+                                        <option value="espagnol">Espagnol</option>
+                                        <option value="anglais">Anglais</option>
+                                        <option value="chinois">Chinois (Mandarin)</option>
+                                        <option value="hindi">Hindi</option>
+                                        <option value="Arabe">Arabe</option>
+                                        <option value="portugais">Portugais</option>
+                                        <option value="russe">Russe</option>
+                                        <option value="japonais">Japonais</option>
+                                        <option value="allemand">Allemand</option>
+                                        <option value="malais">Malais/Indonésien</option>
+                                        <option value="coréen">Coréen</option>
+                                        <option value="autre">Autre</option>                                        
+                                    </select>
+                                </div>
+                                <div id="autreInput" style="display: none;">
+                                    <label for="autre" class="form-label">Autre:</label>
+                                    <!-- Ajout du style Bootstrap à l'input -->
+                                    <input type="text" id="autre" name="autre_langue_choisi" class="form-control">
+                                </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                            <button type="submit" class="btn btn-primary">Ajouter la langue</button>
+                        </div>
+                    </form>
+                </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+   <script>
+    function showInput() {
+            var selectBox = document.getElementById("typeSelect_langues");
+            var selectedValue = selectBox.options[selectBox.selectedIndex].value;
+            var autreInput = document.getElementById("autreInput");
+
+            if (selectedValue === "autre") {
+                autreInput.style.display = "block";
+            } else {
+                autreInput.style.display = "none";
+            }
+        }
+   </script>
+    <!-- Footer-->
+    <footer class="footer text-center">
+        <div class="container">
+            <!-- Ajoutez votre contenu de pied de page ici -->
+        </div>
+    </footer>
+    <!-- Bootstrap core JS-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Core theme JS-->
+    <script src="js/scripts.js"></script>
+    <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *

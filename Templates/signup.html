@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Freelancer - Start Bootstrap Theme</title>
+        <!-- Favicon-->
+        <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+        <!-- Font Awesome icons (free version)-->
+        <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+        <!-- Google fonts-->
+        <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css" />
+        <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="css/styles.css" rel="stylesheet" />
+    </head>
+    <body id="page-top " class="gradient-custom">
+        <!-- Navigation-->
+        <section class="vh-100 ">
+            <div class="container py-5 h-100">
+              <div class="row d-flex justify-content-center align-items-center h-100">
+                <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+                  <div class="card bg-dark text-white" style="border-radius: 1rem;">
+                    <div class="card-body p-5 text-center">
+          
+                      <div class="mb-md-5 mt-md-4 pb-5">
+          
+                        <h2 class="fw-bold mb-2 text-uppercase">Login</h2>
+                        <p class="text-white-50 mb-5">Please enter your login and password!</p>
+          
+                        <!-- Affichage du message d'erreur -->
+                        {% if error_message %}
+                        <div class="alert alert-danger" role="alert">
+                          {{ error_message }}
+                        </div>
+                        {% endif %} 
+
+                      <!-- formulaire -->
+<form id="signupForm" action="/signup_done" method="post" onsubmit="return validateForm()">
+  <!-- Champs communs à tous les rôles -->
+  <div class="form-outline form-white mb-4">
+      <label class="form-label" for="typeEmailX">Email</label>
+      <input type="email" id="typeEmailX" class="form-control form-control-lg" name="email" required/>
+  </div>
+
+  <div class="form-outline form-white mb-4">
+      <label class="form-label" for="typePassword">Mot de passe</label>
+      <input type="password" id="typePassword" class="form-control form-control-lg" name="password" required>
+  </div>
+
+  <div class="form-outline form-white mb-4">
+      <label class="form-label" for="typeConfirmPassword">Confirmation du mot de passe</label>
+      <input type="password" id="typeConfirmPassword" class="form-control form-control-lg" name="confirm_password" oninput="checkPasswordMatch()" required>
+      <div id="passwordMismatch" style="color: red; display: none;">Les mots de passe ne correspondent pas.</div>
+  </div>
+
+  <div class="form-outline form-white mb-4">
+      <label class="form-label" for="typeSelect">Sélectionnez un rôle</label>
+      <select id="typeSelect" class="form-control form-control-lg" name="role" required>
+          <option value="">Choisir le type de compte</option>
+          <option value="auteur">Auteur</option>
+          <option value="etablissement">Etablissement</option>
+          <option value="interprete">Interprete</option>
+          <option value="accompagnateur">Accompagnateur</option>
+      </select>
+  </div>
+
+  <div class="roleFields auteurFields form-white mb-4" style="display: none;">
+      <!-- Champs pour le rôle "auteur" -->
+      <div class="form-outline form-white mb-4">
+          <label class="form-label" for="nom_auteur">Nom</label>
+          <input type="text" id="nom_auteur" class="form-control form-control-lg" name="nom_auteur" required/>
+      </div>
+
+      <div class="form-outline form-white mb-4">
+          <label class="form-label" for="prenom_auteur">Prenom</label>
+          <input type="text" id="prenom_auteur" class="form-control form-control-lg" name="prenom_auteur" required/>
+      </div>
+
+      <div class="form-outline form-white mb-4">
+          <label class="form-label" for="adresse_auteur">Adresse</label>
+          <input type="text" id="adresse_auteur" class="form-control form-control-lg" name="adresse_auteur" required/>
+      </div>
+  </div>
+
+  <div class="roleFields etablissementFields form-white mb-4" style="display: none;">
+      <!-- Champs pour le rôle "etablissement" -->
+      <div class="form-outline form-white mb-4">
+          <label class="form-label" for="nom_etab">Nom d'établissement</label>
+          <input type="text" id="nom_etab" class="form-control form-control-lg" name="nom_etab" required/>
+      </div>
+
+      <div class="form-outline form-white mb-4">
+          <label class="form-label" for="typeEtabType">Type d'établissement</label>
+          <select id="typeEtabType" class="form-control form-control-lg" name="etab_type" required>
+              <option value="">Sélectionnez un type d'établissement</option>
+              <option value="Université">Université</option>
+              <option value="Lycée général">Lycée général</option>
+              <option value="Lycée professionnel">Lycée professionnel</option>
+              <option value="Collège">Collège</option>
+              <option value="École primaire">École primaire</option>
+              <option value="Maternelle">Maternelle</option>
+              <option value="Établissement médico-social">Établissement médico-social</option>
+              <option value="Établissement pénitentiaire">Établissement pénitentiaire</option>
+          </select>
+      </div>
+
+      <div class="form-outline form-white mb-4">
+          <label class="form-label" for="adresse_etab">Adresse d'établissement</label>
+          <input type="text" id="adresse_etab" class="form-control form-control-lg" name="adresse_etab" required>
+      </div>
+
+      <div class="form-outline form-white mb-4">
+          <label class="form-label" for="idreferent">Identifiant du référent</label>
+          <input type="text" id="idreferent" class="form-control form-control-lg" name="idreferent" required/>
+      </div>
+
+      <div class="form-outline form-white mb-4">
+          <label class="form-label" for="nom_ref">Nom du référent</label>
+          <input type="text" id="nom_ref" class="form-control form-control-lg" name="nom_ref" required/>
+      </div>
+
+      <div class="form-outline form-white mb-4">
+          <label class="form-label" for="prenom_ref">Prenom du référent</label>
+          <input type="text" id="prenom_ref" class="form-control form-control-lg" name="prenom_ref" required/>
+      </div>
+
+      <div class="form-outline form-white mb-4">
+          <label class="form-label" for="typeTel_ref">Numéro de téléphone du référent</label>
+          <input type="tel" id="typeTel_ref" class="form-control form-control-lg" name="telephone_ref" pattern="[0-9]{10}" maxlength="10" required/>
+      </div>
+  </div>
+
+  <div class="roleFields interpreteFields accompagnateurFields form-white mb-4" style="display: none;">
+      <!-- Champs pour les rôles "interprete" et "accompagnateur" -->
+      <div class="form-outline form-white mb-4">
+          <label class="form-label" for="nom_accomp_interp">Nom</label>
+          <input type="text" id="nom_accomp_interp" class="form-control form-control-lg" name="nom_accomp_interp" required/>
+      </div>
+
+      <div class="form-outline form-white mb-4">
+          <label class="form-label" for="prenom_accomp_interp">Prenom</label>
+          <input type="text" id="prenom_accomp_interp" class="form-control form-control-lg" name="prenom_accomp_interp" required/>
+      </div>
+
+      <div class="form-outline form-white mb-4">
+          <label class="form-label" for="typeTel_accomp_interp">Numéro de téléphone</label>
+          <input type="tel" id="typeTel_accomp_interp" class="form-control form-control-lg" name="telephone_accomp_interp" pattern="[0-9]{10}" maxlength="10" required>
+      </div>
+      <!-- Ajoutez d'autres champs pour les rôles "interprete" et "accompagnateur" ici -->
+  </div>
+
+  <button class="btn btn-outline-light btn-lg px-5" type="submit">S'inscrire</button>
+</form>
+
+                      
+                      <script>
+                            document.getElementById('typeSelect').addEventListener('change', function() {
+                            var role = this.value;
+                            var roleFields = document.querySelectorAll('.roleFields');
+                              
+                              // Parcours de tous les champs spécifiques à un rôle
+                            roleFields.forEach(function(field) {
+                                  // Si le champ appartient au rôle sélectionné, le rendre requis
+                                  if (field.classList.contains(role + 'Fields')) {
+                                      var inputs = field.querySelectorAll('input, select, textarea');
+                                      inputs.forEach(function(input) {
+                                          input.setAttribute('required', '');
+                                      });
+                                      field.style.display = 'block';
+                                  } else {
+                                      // Si le champ n'appartient pas au rôle sélectionné, le rendre non requis et le cacher
+                                      var inputs = field.querySelectorAll('input, select, textarea');
+                                      inputs.forEach(function(input) {
+                                          input.removeAttribute('required');
+                                      });
+                                      field.style.display = 'none';
+                                  }
+                              });
+                          });
+
+
+                          function checkPasswordMatch() {
+                              var password = document.getElementById("typePassword").value;
+                              var confirmPassword = document.getElementById("typeConfirmPassword").value;
+
+                              if (password != confirmPassword) {
+                                document.getElementById("passwordMismatch").style.display = "block";
+                                return false;
+                              } else {
+                                document.getElementById("passwordMismatch").style.display = "none";
+                                return true;
+                              }
+                            }
+                          function validateForm() {
+                              if (checkPasswordMatch){
+                                console.log("zbi");
+                              }
+                              return checkPasswordMatch();
+                          } 
+                      </script>
+                        <div class="d-flex justify-content-center text-center mt-4 pt-1">
+                          <a href="#!" class="text-white"><i class="fab fa-facebook-f fa-lg"></i></a>
+                          <a href="#!" class="text-white"><i class="fab fa-twitter fa-lg mx-4 px-2"></i></a>
+                          <a href="#!" class="text-white"><i class="fab fa-google fa-lg"></i></a>
+                        </div>
+          
+                      </div>
+
+          
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+          
+        <!-- Bootstrap core JS-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Core theme JS-->
+        <script src="js/scripts.js"></script>
+        <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
+        <!-- * *                               SB Forms JS                               * *-->
+        <!-- * * Activate your form at https://startbootstrap.com/solution/contact-forms * *-->
+        <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
+        <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
+    </body>
+</html>
